@@ -4,7 +4,9 @@
 * of this assignment has been copied manually or electronically from any other source
 * (including 3rd party web sites) or distributed to other students.
 *
-* Name:Sukhvir Singh  Student ID:155312218 Date: 1 FEB 
+* Name:Sukhvir Singh 
+* Student ID:155312218 
+* Date: 1 FEB 
 *
 * Online (Cyclic) Link: https://happy-puce-seagull.cyclic.app/
 *
@@ -36,33 +38,39 @@ app.get('/about', (req, res)=>{
     res.sendFile(path.join(__dirname, '/views/about.html'))
 });
 
+//Students File
 app.get('/students', (req, res) => {
-//	var studnets = dataService.getstudents();
 	dataService.getAllStudents()
 		.then((studentsArr) => {
-			var studnet = studentsArr.map((elem, index) => (index + 1) + '. ' + elem.firstName + '<br>');
-			var namesWithoutCommas = studnet.join('');
-		    res.send(`Student Names:<br>  ${namesWithoutCommas}`);
+			//var studnet = studentsArr.map((elem, index) => (index + 1) + '. ' + elem.firstName + '<br>');
+			//var namesWithoutCommas = studnet.join('');
+		    	//res.send(`Student Names:<br>  ${namesWithoutCommas}`);
+		    res.send(studentsArr);
 		}).catch((err)=>{res.json({ message: err });});
 });
 
+//Intenational student File
 app.get('/intlstudents', (req, res) => {
 	dataService.getInternationalStudents().then((studentsArr) => {
 		var student = studentsArr.map(function(elem, index){
 			if(elem.isInternationalStudent == true){
-				return (index + 1) + '. ' + elem.firstName + '<br>';
+				//return (index + 1) + '. ' + elem.firstName + '<br>';
+				return elem;
 			}
 		});	
-		var namesWithoutCommas = student.join('');
-    res.send(`International Students:<br>  ${namesWithoutCommas}`);
+		//var namesWithoutCommas = student.join('');
+    //res.send(`International Students:<br>  ${namesWithoutCommas}`);
+    res.send(student);
   }).catch((err)=>{res.json({ message: err });});
 });
 
+//Programs File
 app.get('/programs', (req, res)=>{
 		dataService.getPrograms().then((ProgramArr) => {
-			var progrms = ProgramArr.map((elem, index) => (index + 1) + '. ' + elem.programName + '<br>');
-			var progrmsWithoutCommas = progrms.join('');
-		res.send(`Program Names:<br> ${progrmsWithoutCommas}`)
+			//var progrms = ProgramArr.map((elem, index) => (index + 1) + '. ' + elem.programName + '<br>');
+			//var progrmsWithoutCommas = progrms.join('');
+		//res.send(`Program Names:<br> ${progrmsWithoutCommas}`)
+		res.send(ProgramArr);
 	}).catch((err)=>{res.json({ message: err });});
 });
 
