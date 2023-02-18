@@ -75,11 +75,26 @@ function addImage(imageUrl){
 
 function getImages(){
 	return new Promise((resolve, reject)=>{
+ cloudinary.api.resources({ type: 'upload', prefix: 'web_as3/' }, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        const images = result.resources.map((resource) => {
+          return {
+            public_id: resource.public_id,
+            url: cloudinary.url(resource.public_id)
+          };
+        });
+        resolve(images);
+      }
+    });
+/*
 		if(images.length == 0)
 			reject('no results returned');		
 		else{
 			resolve(images);
 		}
+*/
 	});
 }
 
