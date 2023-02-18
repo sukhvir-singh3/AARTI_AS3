@@ -1,9 +1,7 @@
 const fs = require('fs');
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
-
 const upload = multer();
-
 let students = [];
 let programs = [];
 let images   = [];
@@ -32,7 +30,6 @@ function initialize(){
 	});
 }
 
-//initialize();
 function getAllStudents() {
   return new Promise((resolve, reject) => {
     if (students.length === 0) return reject("no results returned");
@@ -57,7 +54,7 @@ function getPrograms() {
 
 function addImage(imageUrl){
 	return new Promise((resolve, reject)=>{
-		cloudinary.uploader.upload(imageUrl, { folder: "web_as3" }, (error, result)=>{
+		cloudinary.uploader.upload(imageUrl, { folder: "as3" }, (error, result)=>{
 			if(error){
 				console.log(error);
 				reject(error);
@@ -75,7 +72,7 @@ function addImage(imageUrl){
 
 function getImages(){
 	return new Promise((resolve, reject)=>{
- cloudinary.api.resources({ type: 'upload', prefix: 'web_as3/' }, (error, result) => {
+ 	cloudinary.api.resources({ type: 'upload', prefix: 'as3/' }, (error, result) => {
       if (error) {
         reject(error);
       } else {
@@ -88,13 +85,6 @@ function getImages(){
         resolve(images);
       }
     });
-/*
-		if(images.length == 0)
-			reject('no results returned');		
-		else{
-			resolve(images);
-		}
-*/
 	});
 }
 

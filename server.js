@@ -1,14 +1,14 @@
 /*********************************************************************************
-* WEB322 – Assignment 02
+* WEB322 – Assignment 03
 * I declare that this assignment is my own work in accordance with Seneca Academic Policy. No part
 * of this assignment has been copied manually or electronically from any other source
 * (including 3rd party web sites) or distributed to other students.
 *
-* Name:Sukhvir Singh 
-* Student ID:155312218 
-* Date: 1 FEB 
+* Name: Aarti 
+* Student ID: 154931216 
+* Date: 17 FEB 
 *
-* Online (Cyclic) Link: https://happy-puce-seagull.cyclic.app/
+* Online (Cyclic) Link: 
 *
 ********************************************************************************/ 
 
@@ -17,7 +17,6 @@ var express = require('express');
 var path = require('path');
 var dataService = require('./data-service.js');
 const fs = require('fs');
-/**********************AS2***********************/
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
@@ -40,30 +39,24 @@ var onHttpStart = function(){
     console.log("Express http server listening on", HTTP_PORT);
 }
 
-//Main File
 app.get("/", (req,res)=>{
     res.sendFile(path.join(__dirname, "/views/home.html"));
 });
 
-//About File
 app.get('/about', (req, res)=>{
     res.sendFile(path.join(__dirname, '/views/about.html'))
 });
 
-/**********************AS2***********************/
 app.use(express.urlencoded({ extended: true }));
 
-//Add Studnet
 app.get('/students/add', (req, res)=>{
     res.sendFile(path.join(__dirname, '/views/addStudent.html'))
 });
 
-//Add Images
 app.get('/images/add', (req, res)=>{
     res.sendFile(path.join(__dirname, '/views/addImage.html'))
 });
 
-//Request for image
 app.post('/images/add',upload.single('imageFile'), (req,res)=>{
 	 if(req.file){
         let streamUpload = (req) => {
@@ -96,10 +89,6 @@ app.post('/images/add',upload.single('imageFile'), (req,res)=>{
     }
 
     function processForm(imageUrl){
-
-        // TODO: Process the image url on Cloudinary before redirecting to /images.
-        // Note: the required "addImage" function is not created yet in data-service.js.
-        // ... ...
          dataService.addImage(imageUrl)
 	    .then(() => {
      		 res.redirect("/images");
@@ -122,7 +111,6 @@ app.get('/images', (req, res)=>{
  		});
 });
 
-//for sutdents POST /students/add
 app.post('/students/add', (req, res)=>{
 	dataService.addStudent(req.body)
 		.then(()=>{
@@ -133,6 +121,7 @@ app.post('/students/add', (req, res)=>{
      			 res.sendStatus(500);
     		});
 });
+
 app.get('/student/:id', (req, res) => {
 	  const studentId = req.params.id;
 
@@ -148,11 +137,8 @@ app.get('/student/:id', (req, res) => {
   	    res.status(500).json({ message: err });
     });
 });
-//Students File
-//NOTE: I was trying somethign new so i put the them in comments, becasue i want to match the output of the 
-//      assignment as required which i did ^^ 
+
 app.get('/students', (req, res) => {
-	// if there are no query parameters
 	if(Object.keys(req.query).length === 0){
 		dataService.getAllStudents()
 			.then((studentsArr) => {
@@ -162,7 +148,6 @@ app.get('/students', (req, res) => {
 				res.json({ message: err });
 		 	 });
 	}
-	// if there are query parameters
 	else{
 		let status = req.query.status;	
 		let program = req.query.program;	
@@ -198,7 +183,6 @@ app.get('/students', (req, res) => {
 	}
 });
 
-//Intenational student File
 app.get('/intlstudents', (req, res) => {
 	dataService.getInternationalStudents().then((studentsArr) => {
 		var student = studentsArr.map(function(elem, index){
@@ -207,18 +191,12 @@ app.get('/intlstudents', (req, res) => {
 				return elem;
 			}
 		});	
-		//var namesWithoutCommas = student.join('');
-    //res.send(`International Students:<br>  ${namesWithoutCommas}`);
     res.send(student);
   }).catch((err)=>{res.json({ message: err });});
 });
 
-//Programs File
 app.get('/programs', (req, res)=>{
 		dataService.getPrograms().then((ProgramArr) => {
-			//var progrms = ProgramArr.map((elem, index) => (index + 1) + '. ' + elem.programName + '<br>');
-			//var progrmsWithoutCommas = progrms.join('');
-		//res.send(`Program Names:<br> ${progrmsWithoutCommas}`)
 		res.send(ProgramArr);
 	}).catch((err)=>{res.json({ message: err });});
 });
